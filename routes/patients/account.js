@@ -1,10 +1,18 @@
 
 const express = require('express');
 const router = express.Router();
-const {signupPatient, loginPatient}= require('../../controllers/patients/accounts')
+const {signup, login}= require('../../controllers/patients/accounts')
+const cors = require('cors')
 
-router.post('/signup', signupPatient);
-router.post('/login',  loginPatient);
+router.use(
+    cors({
+        credentials: true,
+        origin: 'http://localhost:3000'
+    })
+)
+
+router.post('/signup', signup);
+router.post('/login',  login);
 
 
 module.exports = router;

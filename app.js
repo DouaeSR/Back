@@ -11,8 +11,10 @@ mongoose.connect(`${process.env.MONGOOSE}`,
 
 
 const app = express();
+app.use(express.json())
 
 app.use((req, res, next) => {
+    console.log(req.body)
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
@@ -20,6 +22,6 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/api/patients/auth', patientsRoutes);
+app.use('/api/patients', patientsRoutes);
 
 module.exports = app;
