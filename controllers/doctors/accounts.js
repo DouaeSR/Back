@@ -1,6 +1,6 @@
- const Patient = require('../../models/patientModel');
- const bcrypt = require('bcrypt');
- const jwt = require('jsonwebtoken');
+const Doctor = require('../../models/doctorModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
  
 
 require('dotenv').config();
@@ -8,13 +8,13 @@ require('dotenv').config();
 
 exports.signup = (req, res, next) => {
     
-    bcrypt.hash(req.body.password, 10)     // 10 = nbr de tour d'algorythme
+    bcrypt.hash(req.body.password, 10)    
     .then(hash => {
-        const {firstname,lastname,birthday,gender,email} = req.body
-        const patient = new Patient({
-          firstName: firstname,
-          lastName: lastname,
-          birthday: birthday,
+        const {firstName,lastName,specialization,gender,email} = req.body
+        const doctor = new Doctor({
+          firstName: firstName,
+          lastName: lastName,
+          specialization : specialization,
           gender: gender,
           email: email.toLowerCase(),
           password: hash,
@@ -22,10 +22,9 @@ exports.signup = (req, res, next) => {
        
         
         //console.log(patient.email);
-         patient.save()
+         doctor.save()
          .then(() => {
-
-            res.status(201).json({ message: 'Utilisateur créé !', patient });
+            res.status(201).json({ message: 'Docteur créé !', doctor });
         })
         .catch(error => res.status(400).json({ error }));
 })
@@ -33,26 +32,25 @@ exports.signup = (req, res, next) => {
 };
 
 
-
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const patient = await Patient.findOne({ email });
-        if (!patient) {
+        const doctor = await Doctor.findOne({ email });
+        if (!doctor) {
             return res.status(401).json({ message: 'Auth failed' });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, patient.password);
+        const isPasswordValid = await bcrypt.compare(password, doctor.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Auth failed' });
         }
 
         const token = jwt.sign(
             {
-                email: patient.email,
-                userId: patient._id,
-                Type : "Patient"
+                email: doctor.email,
+                userId: doctor._id,
+                Type : "Doctor"
             },
             process.env.SECRET,
             {
@@ -61,8 +59,8 @@ exports.login = async (req, res) => {
         );
 
         res.status(200).json({
-            Type: 'Patient',
-            user:patient,
+            Type: 'Doctor',
+            user:doctor,
             token: token
         });
     } catch (error) {

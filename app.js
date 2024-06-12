@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose= require('mongoose')
 require('dotenv').config()
 const patientsRoutes =require('./routes/patients/account')
+const doctorsRoutes =require('./routes/doctors/account')
+const appointmentsRoutes = require('./routes/patients/appointments');
 mongoose.connect(`${process.env.MONGOOSE}`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -23,5 +25,7 @@ app.use((req, res, next) => {
 
 
 app.use('/api/patients', patientsRoutes);
+app.use('/api/doctors', doctorsRoutes);
+app.use('/api/appointments', appointmentsRoutes);
 
 module.exports = app;
