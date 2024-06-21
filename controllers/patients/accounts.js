@@ -8,7 +8,7 @@ require('dotenv').config();
 
 exports.signup = (req, res, next) => {
     
-    bcrypt.hash(req.body.password, 10)     // 10 = nbr de tour d'algorythme
+    bcrypt.hash(req.body.password, 10)     
     .then(hash => {
         const {firstname,lastname,birthday,gender,email} = req.body
         const patient = new Patient({
@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
             },
             process.env.SECRET,
             {
-                expiresIn: '1h' 
+                expiresIn: '24h' 
             }
         );
 
