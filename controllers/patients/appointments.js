@@ -2,27 +2,42 @@ const Appointment = require('../../models/appointmentModel');
 
 
 
- exports.addAppointment = async (req, res, next) => { 
-    console.log('addAppointment')
-    console.log(req.body)
-    // const appointment = new Appointment({
-    //     IdDoctor: req.body.IdDoctor,
-    //     IdPatient: req.body.IdPatient,
-    //     date: req.body.date
-    //   });
+exports.addAppointment = async (req, res, next) => { 
     console.log('addAppointment');
     console.log(req.body);
 
     const { IdDoctor, IdPatient, date } = req.body;
-    const appointmentDate = new Date(date);
-
-    const appointment = new Appointment({
-        IdDoctor,
-        IdPatient,
-        date: appointmentDate
-    });
+    const appointmentDate = new Date(date).setHours(0, 0, 0, 0); 
+    console.log(appointmentDate);
 
     try {
+        
+        const existingAppointment = await Appointment.findOne({
+            IdDoctor,
+            IdPatient,
+            date: appointmentDate
+        });
+
+        if (existingAppointment) {
+            return res.status(400).json({ message: 'You already have an appointment with this doctor on this date' });
+        }
+
+      
+        const count = await Appointment.countDocuments({
+            IdDoctor,
+            date: appointmentDate
+        });
+
+        if (count >= 10) {
+            return res.status(400).json({ message: 'No more appointments available for this date' });
+        }
+
+        const appointment = new Appointment({
+            IdDoctor,
+            IdPatient,
+            date: appointmentDate
+        });
+
         await appointment.save();
         res.status(201).json({ message: 'Appointment has been added', appointment });
     } catch (error) {
@@ -37,11 +52,9 @@ const Appointment = require('../../models/appointmentModel');
  };
 
  exports.getAppointmentDoctor = (req, res, next) => { 
-    console.log('postTest')
-    res.status(200).json({
-        userId: req.auth.userId,
-        Type:req.auth.userType,
-    });
+    Appointment.find({IdDoctor:req.auth.userId})
+    .then(appointments => res.status(200).json(appointments))
+    .catch(error => res.status(400).json({error}))
  };
 
  exports.getSingleAppointment = (req, res, next) => { 
@@ -75,4 +88,23 @@ const Appointment = require('../../models/appointmentModel');
   }
   }
 
-  
+   // const { IdDoctor, date } = req.body;
+    // console.log(date)
+    // const appointmentDate = new Date(date).setHours(0, 0, 0, 0); 
+    //  console.log(appointmentDate)
+    // try {
+        
+    //     const count = await Appointment.countDocuments({
+    //         IdDoctor,
+    //         date: appointmentDate
+    //     });
+
+    //     if (count >= 10) {
+    //         return res.status(400).json({ message: 'No more appointments available for this date' });
+    //     }
+
+    //     const appointment = new Appointment({
+    //         IdDoctor,
+    //         IdPatient: req.body.IdPatient,
+    //         date: appointmentDate
+    //     });
