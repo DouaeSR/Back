@@ -7,8 +7,9 @@ exports.addAppointment = async (req, res, next) => {
     console.log(req.body);
 
     const { IdDoctor, IdPatient, date } = req.body;
-    const appointmentDate = new Date(date).setHours(0, 0, 0, 0); 
-    console.log(appointmentDate);
+    const appointmentDate = new Date(date); 
+    appointmentDate.setDate(appointmentDate.getDate() + 1);
+  
 
     try {
         
