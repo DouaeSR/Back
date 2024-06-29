@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const uniqueValidator = require('mongoose-unique-validator');
 const doctorSchema = new mongoose.Schema({
   email: { 
     type: String, 
@@ -28,6 +28,9 @@ const doctorSchema = new mongoose.Schema({
   adress: { 
     type: String 
   },
+  education: { 
+    type: String 
+  },
 
   specialization: { 
     type: String,
@@ -37,17 +40,15 @@ const doctorSchema = new mongoose.Schema({
   experiences: {
     type: Array,
   },
-
-  bio: { type: String, maxLength: 50 },
  
-  schedual: { type: Array },
+  schedual: { type: Object },
 
-  Rating: {
-    type: Number,
-    default: 0,
+  isApproved: {
+    type: String,
+    enum: ["pending", "approved"],
+    default: "pending",
   },
-  
-  // appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
 });
+doctorSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("doctor", doctorSchema);

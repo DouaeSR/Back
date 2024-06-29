@@ -22,17 +22,29 @@ exports.signup = (req, res, next) => {
        
         
         //console.log(patient.email);
-         patient.save()
-         .then(() => {
+        patient.save()
+                .then(() => {
+                    const token = jwt.sign(
+                        { 
+                            email: patient.email,
+                            userId: patient._id,
+                            Type : "Patient"
 
-            res.status(201).json({ message: 'Utilisateur créé !', patient });
+                        },
+                        process.env.SECRET, // Ensure you have this environment variable set
+                        { expiresIn: '24h' }
+                    );
+                    res.status(200).json({
+                        Type: 'Patient',
+                        user:patient,
+                        token: token
+                    });
+                })
+                
+                .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(400).json({ error }));
-})
-.catch(error => res.status(500).json({ error }))
+        .catch(error => res.status(500).json({ error }));
 };
-
-
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;

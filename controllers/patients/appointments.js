@@ -46,14 +46,16 @@ exports.addAppointment = async (req, res, next) => {
     }
 };
 
- exports.getAppointmentPatient = (req, res, next) => { 
-   Appointment.find({IdPatient:req.auth.userId})
-    .then(appointments => res.status(200).json(appointments))
-    .catch(error => res.status(400).json({error}))
- };
+exports.getAppointmentPatient = (req, res, next) => { 
+    Appointment.find({ IdPatient: req.auth.userId })
+      .populate('IdDoctor', 'lastName specialization firstName') 
+      .then(appointments => res.status(200).json(appointments))
+      .catch(error => res.status(400).json({ error }));
+  };
 
  exports.getAppointmentDoctor = (req, res, next) => { 
     Appointment.find({IdDoctor:req.auth.userId})
+    .populate('IdPatient', ' firstName lastName specialization') 
     .then(appointments => res.status(200).json(appointments))
     .catch(error => res.status(400).json({error}))
  };
@@ -88,24 +90,7 @@ exports.addAppointment = async (req, res, next) => {
       res.status(500).json({ error: 'Error fetching appointment count' });
   }
   }
+ 
 
-   // const { IdDoctor, date } = req.body;
-    // console.log(date)
-    // const appointmentDate = new Date(date).setHours(0, 0, 0, 0); 
-    //  console.log(appointmentDate)
-    // try {
-        
-    //     const count = await Appointment.countDocuments({
-    //         IdDoctor,
-    //         date: appointmentDate
-    //     });
 
-    //     if (count >= 10) {
-    //         return res.status(400).json({ message: 'No more appointments available for this date' });
-    //     }
-
-    //     const appointment = new Appointment({
-    //         IdDoctor,
-    //         IdPatient: req.body.IdPatient,
-    //         date: appointmentDate
-    //     });
+   

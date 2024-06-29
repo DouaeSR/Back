@@ -16,4 +16,5 @@ router.get('/count',auth,getNumberOfAppointments)
 
 
 
+
 module.exports = router;

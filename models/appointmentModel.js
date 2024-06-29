@@ -2,20 +2,20 @@ const mongoose = require("mongoose");
 
 const appointmentSchema = mongoose.Schema({
   IdDoctor: {
-    type: String,
-    ref: "Doctor",
+    type: mongoose.Types.ObjectId,
+    ref: "doctor",
     required: true,
   },
   IdPatient: {
     type: mongoose.Types.ObjectId,
-    ref: "Patient",
+    ref: "patient",
     required: true,
   },
   date: { type: Date, required: true },
   
   status: {
     type: String,
-    enum: ["pending", "approved", "cancelled"],
+    enum: ["pending", "done", "cancelled"],
     default: "pending",
   },
 });

@@ -4,8 +4,13 @@ const mongoose= require('mongoose')
 require('dotenv').config()
 const patientsRoutes =require('./routes/patients/account')
 const doctorsRoutes =require('./routes/doctors/account')
+const adminRoutes =require('./routes/admin/accounts')
 const appointmentsRoutes = require('./routes/patients/appointments');
 const listRoutes = require('./routes/patients/doctors')
+const dataRoutes = require('./routes/doctors/patients')
+const PatientDataRoutes = require ('./routes/patients/data')
+const DoctorsDataRoutes = require ('./routes/doctors/data')
+
 mongoose.connect(`${process.env.MONGOOSE}`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -27,7 +32,11 @@ app.use((req, res, next) => {
 
 app.use('/api/patients', patientsRoutes );
 app.use('/api/patients', listRoutes);
+app.use('/api/patients', PatientDataRoutes);
+app.use('/api/admin', adminRoutes );
 app.use('/api/doctors', doctorsRoutes);
+app.use('/api/doctors', DoctorsDataRoutes);
+app.use('/api/doctors', dataRoutes);
 app.use('/api/appointments', appointmentsRoutes);
 
 module.exports = app;

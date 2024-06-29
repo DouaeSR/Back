@@ -24,7 +24,23 @@ exports.signup = (req, res, next) => {
         //console.log(patient.email);
          doctor.save()
          .then(() => {
-            res.status(201).json({ message: 'Docteur créé !', doctor });
+            const token = jwt.sign(
+                {
+                    email: doctor.email,
+                    userId: doctor._id,
+                    Type : "Doctor"
+                },
+                process.env.SECRET,
+                {
+                    expiresIn: '1h' 
+                }
+            );
+    
+            res.status(200).json({
+                Type: 'Doctor',
+                user:doctor,
+                token: token
+            });
         })
         .catch(error => res.status(400).json({ error }));
 })
@@ -54,7 +70,7 @@ exports.login = async (req, res) => {
             },
             process.env.SECRET,
             {
-                expiresIn: '1h' 
+                expiresIn: '24h' 
             }
         );
 
