@@ -43,7 +43,7 @@ const doctorSchema = new mongoose.Schema({
  
   schedual: { type: Object },
 
-  isApproved: {
+  status: {
     type: String,
     enum: ["pending", "approved"],
     default: "pending",

@@ -1,5 +1,6 @@
 const Admin = require('../../models/adminModel');
 const Patient = require('../../models/patientModel')
+const Doctor = require('../../models/doctorModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
  
@@ -49,5 +50,33 @@ exports.getAllPatients = async (req, res) => {
       res.status(200).json(patients);
     } catch (error) {
       res.status(500).json({ error: 'An error occurred while fetching patients.' });
+    }
+  };
+
+exports.getNewDoctors = async (req, res) => {
+    try {
+      const newDoctors = await Doctor.find({ status: 'pending' });
+      res.status(200).json(newDoctors);
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while fetching pending doctors.' });
+    }
+  };
+  exports.approveDoctor = async (req, res) => {
+    try {
+      const doctorId = req.params.id;
+      const updatedDoctor = await Doctor.findByIdAndUpdate(doctorId, { status: 'approved' }, { new: true });
+      res.status(200).json(updatedDoctor);
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while approving the doctor.' });
+    }
+  };
+  
+  exports.deleteDoctor = async (req, res) => {
+    try {
+      const doctorId = req.params.id;
+      await Doctor.findByIdAndDelete(doctorId);
+      res.status(200).json({ message: 'Doctor deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while deleting the doctor.' });
     }
   };

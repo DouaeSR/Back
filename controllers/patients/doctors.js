@@ -1,7 +1,7 @@
 const Doctor = require('../../models/doctorModel');
 
 exports.getDoctors = (req, res, next) => { 
-     Doctor.find()
+     Doctor.find({ status: 'approved' })
     .then(doctors=> res.status(200).json(doctors))
     .catch(error => res.status(400).json({error}))
   };
@@ -30,3 +30,4 @@ exports.getDoctors = (req, res, next) => {
       res.status(500).json({ message: err.message });
     }
   };
+  

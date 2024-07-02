@@ -8,7 +8,7 @@ exports.addAppointment = async (req, res, next) => {
 
     const { IdDoctor, IdPatient, date } = req.body;
     const appointmentDate = new Date(date); 
-    appointmentDate.setDate(appointmentDate.getDate() + 1);
+    // appointmentDate.setDate(appointmentDate.getDate() + 1);
   
 
     try {
