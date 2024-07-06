@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+ 
 const appointmentSchema = mongoose.Schema({
   IdDoctor: {
     type: mongoose.Types.ObjectId,
@@ -15,9 +15,10 @@ const appointmentSchema = mongoose.Schema({
   
   status: {
     type: String,
-    enum: ["pending", "done", "cancelled"],
+    enum: ["pending", "done", "canceled"],
     default: "pending",
   },
+  
 });
 
 module.exports = mongoose.model("appointment", appointmentSchema);

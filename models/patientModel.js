@@ -10,7 +10,15 @@ const patientSchema = mongoose.Schema({
   password: { type: String, required: true },
   phone: {type: Number,},
   bloodType:{type: String, enum: ["O+", "o-"]},
-  allergies:{type: String}
+  allergies:{type: String},
+  // cancellationCount: {
+  //   type: Number,
+  //   default: 0
+  // },
+  // lastCancellationDate: {
+  //   type: Date,
+  //   default: null
+  // }
 });
 
 patientSchema.plugin(uniqueValidator);
