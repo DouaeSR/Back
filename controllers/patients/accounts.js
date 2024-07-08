@@ -10,11 +10,14 @@ exports.signup = (req, res, next) => {
     
     bcrypt.hash(req.body.password, 10)     
     .then(hash => {
-        const {firstname,lastname,birthday,gender,email} = req.body
+        const {firstname,lastname,birthday,gender,email,phone,bloodType,allergies} = req.body
         const patient = new Patient({
           firstName: firstname,
           lastName: lastname,
           birthday: birthday,
+          phone:phone,
+          bloodType:bloodType,
+          allergies:allergies,
           gender: gender,
           email: email.toLowerCase(),
           password: hash,

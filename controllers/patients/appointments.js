@@ -1,5 +1,8 @@
 const Appointment = require('../../models/appointmentModel');
 const Patient = require('../../models/patientModel');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 
 
@@ -9,7 +12,7 @@ exports.addAppointment = async (req, res, next) => {
 
     const { IdDoctor, IdPatient, date } = req.body;
     const appointmentDate = new Date(date); 
-    appointmentDate.setDate(appointmentDate.getDate() + 1);
+    // appointmentDate.setDate(appointmentDate.getDate() + 1);
   
 
     try {
@@ -136,26 +139,60 @@ console.log(appointmentId)
 };
 
 exports.getAppointmentsCountByDate = async (req, res, next) => {
-    try {
-        const { IdDoctor } = req.params;
-
-        const appointments = await Appointment.aggregate([
-            { $match: { IdDoctor } },
-            {
-                $group: {
-                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-                    count: { $sum: 1 }
-                }
-            }
-        ]);
-
-        res.status(200).json(appointments);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching appointment count by date' });
+  const doctorId = new ObjectId(req.body.IdDoctor);
+  try {
+  const response = await Appointment.aggregate([
+    {
+      $match: { IdDoctor: doctorId }
+    },
+    {
+      $group: {
+        _id: {
+          year: { $year: "$date" },
+          month: { $month: "$date" },
+          day: { $dayOfMonth: "$date" },
+          IdDoctor : "$IdDoctor"
+          
+        },
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 }
     }
+  ]);
+
+  // console.log(response)
+
+  res.json(response);
+} catch (err) {
+  console.error(err);
+  res.status(500).send(err);
+}
+
+
+ 
 };
 
+exports.updateTime = async (req, res,next) => {
+  const { appointmentId } = req.params;
+  const { time } = req.body;
 
+  try {
+    // Find the appointment by ID and update the time
+    const updatedAppointment = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      { $set: { time } },
+      { new: true } // Return the updated document
+    );
 
+    if (!updatedAppointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
 
-   
+    res.status(200).json(updatedAppointment);
+  } catch (error) {
+    console.error('Error updating appointment time:', error);
+    res.status(500).json({ message: 'Failed to update appointment time' });
+  }
+};

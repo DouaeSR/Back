@@ -10,6 +10,8 @@ const listRoutes = require('./routes/patients/doctors')
 const dataRoutes = require('./routes/doctors/patients')
 const PatientDataRoutes = require ('./routes/patients/data')
 const DoctorsDataRoutes = require ('./routes/doctors/data')
+const UsersRoutes = require ('./routes/login')
+const MessagesRoutes =require ('./routes/contact')
 
 mongoose.connect(`${process.env.MONGOOSE}`,
   { useNewUrlParser: true,
@@ -38,5 +40,7 @@ app.use('/api/doctors', doctorsRoutes);
 app.use('/api/doctors', DoctorsDataRoutes);
 app.use('/api/doctors', dataRoutes);
 app.use('/api/appointments', appointmentsRoutes);
+app.use('/api/users', UsersRoutes );
+app.use('/api/messages', MessagesRoutes );
 
 module.exports = app;

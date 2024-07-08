@@ -80,3 +80,12 @@ exports.getNewDoctors = async (req, res) => {
       res.status(500).json({ error: 'An error occurred while deleting the doctor.' });
     }
   };
+  exports.deletePatient = async (req, res) => {
+    try {
+      const patientId = req.params.id;
+      await Patient.findByIdAndDelete(patientId);
+      res.status(200).json({ message: 'patient deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while deleting the patient.' });
+    }
+  };

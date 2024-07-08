@@ -18,6 +18,7 @@ const doctorSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  gender: { type: String, enum: ["male", "female"] },
   phone: { 
     type: Number 
   },
@@ -25,7 +26,7 @@ const doctorSchema = new mongoose.Schema({
     type: String 
   },
 
-  adress: { 
+  address: { 
     type: String 
   },
   education: { 
@@ -37,8 +38,8 @@ const doctorSchema = new mongoose.Schema({
     required: true,
   },
 
-  experiences: {
-    type: Array,
+  experience: {
+    type: String 
   },
  
   schedual: { type: Object },
