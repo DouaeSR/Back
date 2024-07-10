@@ -42,7 +42,7 @@ const doctorSchema = new mongoose.Schema({
     type: String 
   },
  
-  schedual: { type: Object },
+  schedule: { type: Object },
 
   status: {
     type: String,

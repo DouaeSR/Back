@@ -30,4 +30,15 @@ exports.getDoctors = (req, res, next) => {
       res.status(500).json({ message: err.message });
     }
   };
+
+ exports.getdoctorsbyspeciality=async (req, res) => {
+    try {
+      const { specialization } = req.params;
+      const doctors = await Doctor.find({ specialization });
+      res.json(doctors);
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+      res.status(500).json({ error: 'Failed to fetch doctors' });
+    }
+  };
   

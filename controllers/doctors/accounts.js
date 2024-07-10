@@ -10,7 +10,7 @@ exports.signup = (req, res, next) => {
     
     bcrypt.hash(req.body.password, 10)    
     .then(hash => {
-        const {firstName,lastName,specialization,gender,email,schedual,phone,experience,education,address} = req.body
+        const {firstName,lastName,specialization,gender,email,schedule,phone,experience,education,address} = req.body
         const doctor = new Doctor({
           firstName: firstName,
           phone: phone,
@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
           address:address,
           lastName: lastName,
           specialization : specialization,
-          schedual : schedual,
+          schedule : schedule,
           gender: gender,
           email: email.toLowerCase(),
           password: hash,
